@@ -34,8 +34,7 @@ const addNewInvoice = async () => {
     const rowMap = new Map();
     for (let i = 0; i <= rows.length; i++) {
       if (rows[i]?.id) {
-        console.log('rowMap :>> ', row[i]._rowNumber);
-        rowMap.set(rows[i]?.id, { ...rows[i], index: row[i]._rowNumber });
+        rowMap.set(rows[i]?.id, { ...rows[i], index: rows[i]._rowNumber });
       }
     }
     const arr = [];
@@ -74,9 +73,9 @@ const addNewInvoice = async () => {
           arr.push(rows[invoiceRow.index].save());
         }
       });
-      console.log('arr :>> ', arr);
       await Promise.all(arr);
     }
+    console.log('arr :>> ', arr);
   } catch (error) {
     console.log('error', error);
   }

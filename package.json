@@ -16,5 +16,8 @@
     "google-spreadsheet": "^3.3.0",
     "perf_hooks": "^0.0.1",
     "qs": "^6.11.0"
+  },
+  "engines": {
+    "node": "14.x"
   }
 }
