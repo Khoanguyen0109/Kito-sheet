@@ -110,7 +110,7 @@ const doJob = async () => {
 
     const sheet = doc.sheetsByIndex[0];
     const sheet1 = doc.sheetsByIndex[1];
-    await Promise.all([sheet.clearRows(), sheet1.clearRows()]);
+    await Promise.all([sheet.clearRows()]);
 
     for (let i = 1; i <= page; i++) {
       await initProduct(i);
