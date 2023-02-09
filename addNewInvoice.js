@@ -45,7 +45,6 @@ const addNewInvoice = async () => {
         toPurchaseDate: endOfYear(new Date()),
       });
       invoices.map((invoice) => {
-        console.log('invoice.cre :>> ', invoice.createdDate);
         if (
           new Date(invoice.createdDate).getTime() >=
             newestInvoiceFromSheet[0].createdTimeStamp &&
@@ -74,6 +73,7 @@ const addNewInvoice = async () => {
         }
       });
     }
+    console.log('storage :>> ', storage);
     if (storage.length > 0) {
       await sheet.addRows(storage);
     }
