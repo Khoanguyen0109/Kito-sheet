@@ -115,9 +115,9 @@ const doJob = async () => {
     for (let i = 1; i <= page; i++) {
       await initProduct(i);
     }
-    for (let i = 1; i <= pageInvoice; i++) {
-      await initInvoice(i);
-    }
+    // for (let i = 1; i <= pageInvoice; i++) {
+    //   await initInvoice(i);
+    // }
   } catch (error) {
     console.log('error', error);
   }
