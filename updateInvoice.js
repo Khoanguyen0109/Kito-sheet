@@ -69,6 +69,7 @@ const addNewInvoice = async () => {
             partnerDeliveryEmail:
               invoice?.invoiceDelivery?.partnerDelivery.code,
           };
+          console.log('invoiceRow.index :>> ', invoiceRow.index);
           rows[invoiceRow.index] = invoiceData;
           arr.push(rows[invoiceRow.index].save());
         }

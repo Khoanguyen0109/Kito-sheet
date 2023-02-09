@@ -35,7 +35,6 @@ const addNewInvoice = async () => {
       offset: rows.length - 1,
       limit: 1,
     });
-    console.log('new Date() :>> ', new Date(startOfYear(new Date())));
     if (rows.length === totalInvoice) {
       return;
     }
