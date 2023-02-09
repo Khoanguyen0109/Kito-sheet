@@ -9,8 +9,12 @@ const addNewInvoice = async () => {
   const start = Date.now();
 
   try {
-    const id = '1Q2VJKuSMh6WI-TPIi1v1fPxDx8ZeY5i92lhYdV_I6FA';
-    const doc = await getDoc(id);
+    const data = await axios.get(
+      'https://script.google.com/macros/s/AKfycbzwIkiHFVQ4IPoO-ufXwrxm4bVNgblTy4RViHXq1shvOtQfF6P-5va1cTyNySdcaOWs/exec'
+    );
+    const { id_sheet_1, id_sheet_2, client_email, private_key } =
+      data.data.data[0];
+    const doc = await getDoc(id_sheet_2, client_email, private_key);
     const auth = await axios(authConfig);
     const accessToken = auth.data.access_token;
     const authHeader = {
@@ -67,6 +71,13 @@ const addNewInvoice = async () => {
             partnerDeliveryName: invoice?.invoiceDelivery?.partnerDelivery.name,
             partnerDeliveryEmail:
               invoice?.invoiceDelivery?.partnerDelivery.code,
+            createdDate: format(
+              new Date(invoice.createdDate),
+              'dd/MM/yyyy , H:mm:ss'
+            ),
+            modifiedDate: invoice.modifiedDate
+              ? format(new Date(invoice.modifiedDate), 'dd/MM/yyyy , H:mm:ss')
+              : '',
           };
           storage.push(invoiceData);
         }
