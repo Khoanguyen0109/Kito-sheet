@@ -1,8 +1,16 @@
 const axios = require('axios').default;
 
 const getProducts = async (authHeader, page) => {
-  const itemPerPage = 100;
-  const offset = (page - 1) * itemPerPage + 1;
+  let itemPerPage;
+  let offset;
+  if ((page === 0)) {
+    itemPerPage: 1;
+    offset: 0;
+  } else {
+    itemPerPage = 100;
+    offset = (page - 1) * itemPerPage + 1;
+  }
+
   const res = await axios.get('https://public.kiotapi.com/products', {
     ...authHeader,
     params: {

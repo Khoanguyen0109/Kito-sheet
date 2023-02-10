@@ -108,7 +108,7 @@ const doJob = async () => {
       getTotalProducts(authHeader),
       getTotalInvoice(authHeader),
     ]);
-    console.log('getTotalProducts', totalInvoice);
+    console.log('getTotalProducts', total);
     console.log('getTotalInvoice', totalInvoice);
 
     const PRODUCT_PER_PAGE = 100;
@@ -118,7 +118,7 @@ const doJob = async () => {
     const sheet = doc.sheetsByIndex[0];
     await Promise.all([sheet.clearRows()]);
 
-    for (let i = 1; i <= page; i++) {
+    for (let i = 0; i <= page; i++) {
       await initProduct(i);
     }
     // doc2 = await getDoc(id_sheet_2, client_email, private_key);
