@@ -9,12 +9,14 @@ const {
   getTotalInvoice,
   getProducts,
   getInvoice,
+  getInvoiceDetail,
 } = require('./api');
 
 let accessToken;
 let authHeader;
 let doc;
 let doc2;
+let doc3;
 
 const initProduct = async (page) => {
   try {
@@ -48,8 +50,11 @@ const initProduct = async (page) => {
 const initInvoice = async (page) => {
   try {
     const sheet = doc2.sheetsByIndex[0];
+    const sheetDetail = doc3.sheetsByIndex[0];
+
     const invoices = await getInvoice(authHeader, page);
     const storage = [];
+    const storageDetail = [];
     invoices.map((invoice) => {
       const { statusValue, ...restPayment } = invoice?.payment?.[0] ?? {};
       const invoiceData = {
@@ -75,9 +80,34 @@ const initInvoice = async (page) => {
         partnerDeliveryName: invoice?.invoiceDelivery?.partnerDelivery.name,
         partnerDeliveryEmail: invoice?.invoiceDelivery?.partnerDelivery.code,
       };
+      invoice.invoiceDetails.map((detail) => {
+        const dataDetail = {
+          idInvoice: invoice.id,
+          ...detail,
+          // productBatchExpireId: detail.productBatchExpire?.id,
+          // productBatchExpireName: detail.productBatchExpire?.batchName,
+          // productBatchExpireCreatedDate: format(
+          //   new Date(detail?.productBatchExpire?.createdDate),
+          //   'dd/MM/yyyy , H:mm:ss'
+          // ),
+          // productBatchExpireDate: format(
+          //   new Date(detail?.productBatchExpire?.expireDate),
+          //   'dd/MM/yyyy , H:mm:ss'
+          // ),
+          createdDate: format(
+            new Date(invoice.createdDate),
+            'dd/MM/yyyy , H:mm:ss'
+          ),
+          modifiedDate: invoice.modifiedDate
+            ? format(new Date(invoice.modifiedDate), 'dd/MM/yyyy , H:mm:ss')
+            : '',
+        };
+        storageDetail.push(dataDetail);
+      });
       storage.push(invoiceData);
     });
     await sheet.addRows(storage);
+    await sheetDetail.addRows(storageDetail);
   } catch (error) {
     console.log('error', error);
   }
@@ -91,12 +121,13 @@ const doJob = async () => {
     const data = await axios.get(
       'https://script.google.com/macros/s/AKfycbzwIkiHFVQ4IPoO-ufXwrxm4bVNgblTy4RViHXq1shvOtQfF6P-5va1cTyNySdcaOWs/exec'
     );
-    const { id_sheet_1, id_sheet_2, client_email, private_key } =
+    const { id_sheet_1, id_sheet_2, id_sheet_3, client_email, private_key } =
       data.data.data[0];
     doc = await getDoc(id_sheet_1, client_email, private_key);
     const auth = await axios(authConfig);
     accessToken = auth.data.access_token;
     console.log('accessToken', accessToken);
+    console.log('id_sheet_3', id_sheet_3);
     authHeader = {
       headers: {
         Authorization: 'Bearer ' + accessToken, //the token is a variable which holds the token
@@ -108,7 +139,7 @@ const doJob = async () => {
       getTotalProducts(authHeader),
       getTotalInvoice(authHeader),
     ]);
-    console.log('getTotalProducts', total);
+    // console.log('getTotalProducts', total);
     console.log('getTotalInvoice', totalInvoice);
 
     const PRODUCT_PER_PAGE = 100;
@@ -122,6 +153,7 @@ const doJob = async () => {
       await initProduct(i);
     }
     // doc2 = await getDoc(id_sheet_2, client_email, private_key);
+    // doc3 = await getDoc(id_sheet_3, client_email, private_key);
 
     // for (let i = 1; i <= pageInvoice; i++) {
     //   await initInvoice(i);

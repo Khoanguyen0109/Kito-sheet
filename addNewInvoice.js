@@ -12,9 +12,11 @@ const addNewInvoice = async () => {
     const data = await axios.get(
       'https://script.google.com/macros/s/AKfycbzwIkiHFVQ4IPoO-ufXwrxm4bVNgblTy4RViHXq1shvOtQfF6P-5va1cTyNySdcaOWs/exec'
     );
-    const { id_sheet_1, id_sheet_2, client_email, private_key } =
+    const { id_sheet_1, id_sheet_2, id_sheet_3, client_email, private_key } =
       data.data.data[0];
     const doc = await getDoc(id_sheet_2, client_email, private_key);
+    const doc3 = await getDoc(id_sheet_3, client_email, private_key);
+
     const auth = await axios(authConfig);
     const accessToken = auth.data.access_token;
     const authHeader = {
@@ -26,6 +28,8 @@ const addNewInvoice = async () => {
     sleep(1000);
     const storage = [];
     const sheet = doc.sheetsByIndex[0];
+    const sheetDetail = doc3.sheetsByIndex[0];
+
     const totalInvoice = await getTotalInvoice(authHeader, {
       fromPurchaseDate: startOfYear(new Date()),
       toPurchaseDate: endOfYear(new Date()),
@@ -79,6 +83,30 @@ const addNewInvoice = async () => {
               ? format(new Date(invoice.modifiedDate), 'dd/MM/yyyy , H:mm:ss')
               : '',
           };
+          invoice.invoiceDetails.map((detail) => {
+            const dataDetail = {
+              idInvoice: invoice.id,
+              ...detail,
+              // productBatchExpireId: detail.productBatchExpire?.id,
+              // productBatchExpireName: detail.productBatchExpire?.batchName,
+              // productBatchExpireCreatedDate: format(
+              //   new Date(detail?.productBatchExpire?.createdDate),
+              //   'dd/MM/yyyy , H:mm:ss'
+              // ),
+              // productBatchExpireDate: format(
+              //   new Date(detail?.productBatchExpire?.expireDate),
+              //   'dd/MM/yyyy , H:mm:ss'
+              // ),
+              createdDate: format(
+                new Date(invoice.createdDate),
+                'dd/MM/yyyy , H:mm:ss'
+              ),
+              modifiedDate: invoice.modifiedDate
+                ? format(new Date(invoice.modifiedDate), 'dd/MM/yyyy , H:mm:ss')
+                : '',
+            };
+            storageDetail.push(dataDetail);
+          });
           storage.push(invoiceData);
         }
       });

@@ -62,9 +62,18 @@ const getTotalInvoice = async (authHeader, params) => {
   return res.data.total;
 };
 
+const getInvoiceDetail = async (authHeader, id, params) => {
+  const res = await axios.get(`https://public.kiotapi.com/invoices/${id}`, {
+    ...authHeader,
+    params: params,
+  });
+  return res.data.total;
+};
+
 module.exports = {
   getProducts,
   getInvoice,
   getTotalInvoice,
   getTotalProducts,
+  getInvoiceDetail,
 };
