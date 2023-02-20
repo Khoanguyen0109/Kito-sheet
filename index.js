@@ -139,7 +139,7 @@ const doJob = async () => {
       getTotalProducts(authHeader),
       getTotalInvoice(authHeader),
     ]);
-    // console.log('getTotalProducts', total);
+    console.log('getTotalProducts', total);
     console.log('getTotalInvoice', totalInvoice);
 
     const PRODUCT_PER_PAGE = 100;

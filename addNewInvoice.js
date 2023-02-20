@@ -6,8 +6,8 @@ const { getDoc, authConfig, sleep } = require('./utils');
 const { getInvoice, getTotalInvoice } = require('./api');
 
 const addNewInvoice = async () => {
+  console.log("Add new Invoice")
   const start = Date.now();
-
   try {
     const data = await axios.get(
       'https://script.google.com/macros/s/AKfycbzwIkiHFVQ4IPoO-ufXwrxm4bVNgblTy4RViHXq1shvOtQfF6P-5va1cTyNySdcaOWs/exec'
@@ -27,6 +27,8 @@ const addNewInvoice = async () => {
     };
     sleep(1000);
     const storage = [];
+    const storageDetail = [];
+
     const sheet = doc.sheetsByIndex[0];
     const sheetDetail = doc3.sheetsByIndex[0];
 
@@ -111,9 +113,9 @@ const addNewInvoice = async () => {
         }
       });
     }
-    console.log('storage :>> ', storage);
     if (storage.length > 0) {
       await sheet.addRows(storage);
+      await sheetDetail.addRows(storageDetail);
     }
     const end = Date.now();
     const duration = end - start;
