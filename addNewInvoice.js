@@ -48,6 +48,7 @@ const addNewInvoice = async () => {
     const PRODUCT_PER_PAGE = 100;
 
     const pageInvoice = Math.ceil(totalInvoice / PRODUCT_PER_PAGE);
+    console.log('pageInvoice', pageInvoice);
     console.log('totalInvoice :>> ', totalInvoice);
     const rows = await sheet.getRows();
     const newestInvoiceFromSheet = await sheet.getRows({
@@ -66,7 +67,7 @@ const addNewInvoice = async () => {
         if (
           new Date(invoice.createdDate).getTime() >=
             newestInvoiceFromSheet[0].createdTimeStamp &&
-          invoice.id !== newestInvoiceFromSheet[0].id
+          invoice.id.toString() !== newestInvoiceFromSheet[0].id
         ) {
           const { statusValue, ...restPayment } = invoice?.payment?.[0] ?? {};
           const invoiceData = {
