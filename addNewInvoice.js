@@ -1,7 +1,13 @@
 const axios = require('axios').default;
 const qs = require('qs');
 require('dotenv').config();
-const { format, startOfYear, endOfYear } = require('date-fns');
+const {
+  format,
+  startOfYear,
+  endOfYear,
+  startOfMonth,
+  endOfMonth,
+} = require('date-fns');
 const { getDoc, authConfig, sleep } = require('./utils');
 const { getInvoice, getTotalInvoice } = require('./api');
 
@@ -50,8 +56,8 @@ const addNewInvoice = async () => {
     }
     for (let i = 1; i <= pageInvoice; i++) {
       const invoices = await getInvoice(authHeader, i, {
-        fromPurchaseDate: startOfYear(new Date()),
-        toPurchaseDate: endOfYear(new Date()),
+        fromPurchaseDate: startOfMonth(new Date()),
+        toPurchaseDate: endOfMonth(new Date()),
       });
       invoices.map((invoice) => {
         if (
