@@ -7,7 +7,7 @@ const { getInvoice, getTotalInvoice } = require('./api');
 
 const addNewInvoice = async () => {
   const start = Date.now();
-  console.log("Update Invoice")
+  console.log('Update Invoice');
 
   try {
     const data = await axios.get(
@@ -94,6 +94,7 @@ const addNewInvoice = async () => {
   const end = Date.now();
   const duration = end - start;
   console.log(`Call to doSomething took ${duration} milliseconds`);
+  process.exit(1);
 };
 
 addNewInvoice();

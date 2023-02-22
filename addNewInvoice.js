@@ -6,7 +6,7 @@ const { getDoc, authConfig, sleep } = require('./utils');
 const { getInvoice, getTotalInvoice } = require('./api');
 
 const addNewInvoice = async () => {
-  console.log("Add new Invoice")
+  console.log('Add new Invoice');
   const start = Date.now();
   try {
     const data = await axios.get(
@@ -123,6 +123,7 @@ const addNewInvoice = async () => {
   } catch (error) {
     console.log('error', error);
   }
+  process.exit(1);
 };
 
 addNewInvoice();

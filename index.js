@@ -164,6 +164,7 @@ const doJob = async () => {
   const end = Date.now();
   const duration = end - start;
   console.log(`Call to doSomething took ${duration} milliseconds`);
+  process.exit(1);
 };
 
 doJob();
