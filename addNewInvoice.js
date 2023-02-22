@@ -7,6 +7,7 @@ const {
   endOfYear,
   startOfMonth,
   endOfMonth,
+  startOfDay,
 } = require('date-fns');
 const { getDoc, authConfig, sleep } = require('./utils');
 const { getInvoice, getTotalInvoice } = require('./api');
@@ -56,8 +57,8 @@ const addNewInvoice = async () => {
     }
     for (let i = 1; i <= pageInvoice; i++) {
       const invoices = await getInvoice(authHeader, i, {
-        fromPurchaseDate: startOfMonth(new Date()),
-        toPurchaseDate: endOfMonth(new Date()),
+        fromPurchaseDate: startOfDay(new Date()),
+        toPurchaseDate: startOfDay(new Date()),
       });
       invoices.map((invoice) => {
         if (
