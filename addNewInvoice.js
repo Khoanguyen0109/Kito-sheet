@@ -21,10 +21,12 @@ const addNewInvoice = async () => {
     );
     const { id_sheet_1, id_sheet_2, id_sheet_3, client_email, private_key } =
       data.data.data[0];
-    const doc = await getDoc(id_sheet_2, client_email, private_key);
-    const doc3 = await getDoc(id_sheet_3, client_email, private_key);
+    const [doc, doc3, auth] = await Promise.all([
+      getDoc(id_sheet_2, client_email, private_key),
+      getDoc(id_sheet_3, client_email, private_key),
+      axios(authConfig),
+    ]);
 
-    const auth = await axios(authConfig);
     const accessToken = auth.data.access_token;
     const authHeader = {
       headers: {
@@ -40,8 +42,8 @@ const addNewInvoice = async () => {
     const sheetDetail = doc3.sheetsByIndex[0];
 
     const totalInvoice = await getTotalInvoice(authHeader, {
-      fromPurchaseDate: startOfYear(new Date()),
-      toPurchaseDate: endOfYear(new Date()),
+      fromPurchaseDate: startOfDay(new Date()),
+      toPurchaseDate: startOfDay(new Date()),
     });
     const PRODUCT_PER_PAGE = 100;
 
@@ -121,8 +123,10 @@ const addNewInvoice = async () => {
       });
     }
     if (storage.length > 0) {
-      await sheet.addRows(storage);
-      await sheetDetail.addRows(storageDetail);
+      await Promise.all([
+        sheet.addRows(storage),
+        sheetDetail.addRows(storageDetail),
+      ]);
     }
     const end = Date.now();
     const duration = end - start;

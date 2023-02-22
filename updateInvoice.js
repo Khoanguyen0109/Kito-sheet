@@ -27,8 +27,8 @@ const addNewInvoice = async () => {
     sleep(1000);
     const sheet = doc.sheetsByIndex[0];
     const totalInvoice = await getTotalInvoice(authHeader, {
-      fromPurchaseDate: startOfYear(new Date()),
-      toPurchaseDate: endOfYear(new Date()),
+      fromPurchaseDate: startOfMonth(new Date()),
+      toPurchaseDate: endOfMonth(new Date()),
     });
     console.log('totalInvoice :>> ', totalInvoice);
     const PRODUCT_PER_PAGE = 100;
