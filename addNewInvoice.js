@@ -58,7 +58,7 @@ const addNewInvoice = async () => {
     if (rows.length === totalInvoice) {
       return;
     }
-    for (let i = 0; i <= pageInvoice; i++) {
+    for (let i = 1; i <= pageInvoice; i++) {
       const invoices = await getInvoice(authHeader, i, {
         fromPurchaseDate: startOfDay(new Date()),
         toPurchaseDate: endOfDay(new Date()),
