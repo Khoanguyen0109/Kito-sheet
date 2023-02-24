@@ -3,13 +3,9 @@ const axios = require('axios').default;
 const getProducts = async (authHeader, page) => {
   let itemPerPage;
   let offset;
-  if (page === 0) {
-    itemPerPage = 1;
-    offset = 0;
-  } else {
-    itemPerPage = 100;
-    offset = (page - 1) * itemPerPage + 1;
-  }
+
+  itemPerPage = 100;
+  offset = page - 1 <= 0 ? 0 : (page - 1) * itemPerPage + 1;
 
   const res = await axios.get('https://public.kiotapi.com/products', {
     ...authHeader,
@@ -40,13 +36,9 @@ const getTotalProducts = async (authHeader) => {
 const getInvoice = async (authHeader, page, params) => {
   let itemPerPage;
   let offset;
-  if (page === 0) {
-    itemPerPage = 1;
-    offset = 0;
-  } else {
-    itemPerPage = 100;
-    offset = (page - 1) * itemPerPage + 1;
-  }
+
+  itemPerPage = 100;
+  offset = page - 1 <= 0 ? 0 : (page - 1) * itemPerPage + 1;
 
   const res = await axios.get('https://public.kiotapi.com/invoices', {
     ...authHeader,
