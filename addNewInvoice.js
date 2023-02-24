@@ -8,6 +8,7 @@ const {
   startOfMonth,
   endOfMonth,
   startOfDay,
+  endOfDay,
 } = require('date-fns');
 const { getDoc, authConfig, sleep } = require('./utils');
 const { getInvoice, getTotalInvoice } = require('./api');
@@ -43,13 +44,12 @@ const addNewInvoice = async () => {
 
     const totalInvoice = await getTotalInvoice(authHeader, {
       fromPurchaseDate: startOfDay(new Date()),
-      toPurchaseDate: startOfDay(new Date()),
+      toPurchaseDate: endOfDay(new Date()),
     });
     const PRODUCT_PER_PAGE = 100;
 
     const pageInvoice = Math.ceil(totalInvoice / PRODUCT_PER_PAGE);
-    console.log('pageInvoice', pageInvoice);
-    console.log('totalInvoice :>> ', totalInvoice);
+
     const rows = await sheet.getRows();
     const newestInvoiceFromSheet = await sheet.getRows({
       offset: rows.length - 1,
@@ -58,11 +58,12 @@ const addNewInvoice = async () => {
     if (rows.length === totalInvoice) {
       return;
     }
-    for (let i = 1; i <= pageInvoice; i++) {
+    for (let i = 0; i <= pageInvoice; i++) {
       const invoices = await getInvoice(authHeader, i, {
         fromPurchaseDate: startOfDay(new Date()),
-        toPurchaseDate: startOfDay(new Date()),
+        toPurchaseDate: endOfDay(new Date()),
       });
+      console.log('invoices :>> ', invoices);
       invoices.map((invoice) => {
         if (
           new Date(invoice.createdDate).getTime() >=
